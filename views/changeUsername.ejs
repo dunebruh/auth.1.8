@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Change Username</title>
+<style>
+    /* CSS styles for the entire page */
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    /* CSS styles for the header */
+    h1 {
+        position: relative;
+        top: 150px;
+        color: rgb(0, 0, 0);
+        margin-top: 2em;
+        background-color: rgba(0, 0, 0, 0.288);
+        padding: 10px;
+        display: inline-block;
+        border-radius: 10px;
+
+    }
+
+    /* CSS styles for the form */
+    form {
+        position: relative;
+        top: 150px;
+        margin: 0 auto;
+        width: 60%;
+        text-align: left;
+        background-color: rgba(0, 0, 0, 0.329);
+        padding: 1em;
+        border-radius: 10px;
+        
+    }
+
+   
+    /* CSS styles for the input fields */
+    input {
+        padding: 0.5em;
+        margin: 0.5em;
+        font-size: 1em;
+        width: 95%;
+        border-radius: 5px;
+        border: none;
+        padding-left: 1em;
+        font-weight: bold;
+        transition: all 0.2s;
+    }
+    input[type="text"]::placeholder{
+        color: lightgray;
+    }
+
+    /* CSS styles for the focus state of the input fields */
+    input:focus {
+        outline: none;
+        box-shadow: 0 0 10px #1E90FF;
+    }
+
+    /* CSS styles for the hover state of the input fields */
+    input:hover {
+        cursor: text;;
+    }
+
+    /* CSS styles for the submit button */
+    input[type="submit"] {
+        background-color: #2d9e1e;
+        color: white;
+        padding: 0.5em 1em;
+        border-radius: 5px;
+        border: none;
+        margin-top: 1em;
+        transition: all 0.2s;
+    }
+
+    /* CSS styles for the hover state of the submit button */
+    input[type="submit"]:hover {
+        background-color: #3be025;
+        cursor: pointer;
+    }
+
+    body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://global.hurtigruten.com/globalassets/photos/inspiration/northern-lights/hub/aurora-borealis-above-snowy-island-vestvagoya-lofoten_swen-stroop.jpg?width=1900&height=950&transform=DownFill');
+    background-size: cover;
+    filter: blur(10px);
+    background-color: green;
+    margin: -15px;
+    padding: 15px;
+    z-index: -1;
+}
+
+
+</style>
+
+</head>
+
+<body>
+    <h1>Change Username</h1>
+    <form>
+        
+        <input type="text" id="Name" name="Name" placeholder="Name" required>
+        <br>
+
+        <input type="submit" value="Submit" onclick="return submitForm()">
+    </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
+    <script src="path/to/FileSaver.js"></script>
+    <script>
+        function submitForm() {
+            const name = document.getElementById("Name").value;
+            window.location.href = `<%= redirectUri %>/change?token=<%= token %>&name=${encodeURIComponent(name)}`;
+            return false;
+        }
+    </script>
+    
+</body>
+
+</html>
